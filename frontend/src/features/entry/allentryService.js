@@ -10,7 +10,7 @@ const getAllEntries = async () => {
 };
 // Get  all  entry
 const searchEntry = async (text) => {
-  const response = await axios.get(API_URL + "search/" + text);
+  const response = await axios.get(API_URL + "/search/" + text);
   return response.data;
 };
 const allentryService = {
