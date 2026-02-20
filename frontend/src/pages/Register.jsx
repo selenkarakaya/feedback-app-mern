@@ -29,10 +29,10 @@ export const validateEmail = (email) => {
 function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [randomUsername, setRandomUsername] = useState("");
 
   const [hover, setHover] = useState(false);
-  //set form data
+
+  // set form data
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -40,6 +40,7 @@ function Register() {
     password: "",
     password2: "",
   });
+
   const { name, username, email, password, password2 } = formData;
   const { isLoading } = useSelector((state) => state.auth);
 
@@ -52,48 +53,55 @@ function Register() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
     if (password !== password2) {
       toast.error("Passwords do not match");
-    } else if (!validateEmail(email)) {
-      toast.error("email error");
-    } else if (!validatePassword(password)) {
-      toast.error("pasword error");
-    } else {
-      const userData = { name, username, email, password };
-      dispatch(register(userData));
-      navigate("/");
+      return;
     }
+
+    if (!validateEmail(email)) {
+      toast.error("email error");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error("pasword error");
+      return;
+    }
+
+    const userData = { name, username, email, password };
+    dispatch(register(userData));
+    navigate("/");
   };
 
-  const onNickname = (e) => {
-    const name = generate({
+  const onNickname = () => {
+    const words = generate({
       exactly: 1,
       wordsPerString: 3,
-      formatter: (word) => word.slice(0, 1).toUpperCase().concat(word.slice(1)),
+      formatter: (word) => word.slice(0, 1).toUpperCase() + word.slice(1),
     });
+
     const nick =
-      name[0].replaceAll(" ", "_") + Math.floor(Math.random() * 1000);
-    document.querySelector("#registerForm input[name=username]").value = nick;
-    setRandomUsername(nick);
+      words[0].replaceAll(" ", "_") + Math.floor(Math.random() * 1000);
+
+    setFormData((prev) => ({
+      ...prev,
+      username: nick,
+    }));
   };
 
-  const onHover = () => {
-    setHover(true);
-  };
+  const onHover = () => setHover(true);
+  const onLeave = () => setHover(false);
 
-  const onLeave = () => {
-    setHover(false);
-  };
+  if (isLoading) return <Spinner />;
 
-  if (isLoading) {
-    return <Spinner />;
-  }
   return (
     <div className="flex flex-col items-center w-3/4 mx-auto my-6 bg-lightestGreen rounded-xl">
       <header className="my-4">
         <h1 className="text-center">Register</h1>
         <p>Please create an account</p>
       </header>
+
       <form
         className="w-3/4"
         onSubmit={onSubmit}
@@ -112,16 +120,19 @@ function Register() {
             required
           />
         </div>
+
         <div className="flex my-2">
           <input
             type="text"
             className="w-full p-4 ps-10 text-sm text-darkGreen rounded-lg bg-gray-50 focus:outline-darkYellow focus:outline-4"
             id="username"
             name="username"
+            value={username}
             onChange={onChange}
             placeholder="Username"
             required
           />
+
           <div
             onMouseEnter={onHover}
             onMouseLeave={onLeave}
@@ -156,6 +167,7 @@ function Register() {
             )}
           </div>
         </div>
+
         <div>
           <input
             type="email"
@@ -167,6 +179,7 @@ function Register() {
             placeholder="Enter your email"
             required
           />
+
           <input
             type="password"
             className="my-2 w-full p-4 ps-10 text-sm text-darkGreen rounded-lg bg-gray-50 focus:outline-darkYellow focus:outline-4"
@@ -178,6 +191,7 @@ function Register() {
             required
             data-testid="password"
           />
+
           <input
             type="password"
             className="mb-2 w-full p-4 ps-10 text-sm text-darkGreen rounded-lg bg-gray-50 focus:outline-darkYellow focus:outline-4"
@@ -188,13 +202,15 @@ function Register() {
             placeholder="Confirm password"
             required
           />
+
           <p>
             Already a Eye watering worder?
-            <Link to="/Register" className="text-mediumGreen ml-1">
+            <Link to="/login" className="text-mediumGreen ml-1">
               Log In
             </Link>
           </p>
         </div>
+
         <div className="text-center my-4" data-testid="sbmt">
           <button className="w-1/3 p-4 rounded-lg gradient border-2 border-darkYellow">
             Submit
