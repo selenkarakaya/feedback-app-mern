@@ -1,5 +1,5 @@
 <h1 align="center">
-  📝💧 Eye Watering Words de
+  📝💧 Eye Watering Words
 </h1>
 <p align="center">
     <em>User Authentication, MongoDB Integration, Real-Time Feedback, CRUD Operations, Interactive UI
@@ -10,6 +10,15 @@
 **Eye Watering Words** is an interactive feedback platform where users can share their thoughts, ideas, and experiences. Built with **React**, **Redux**, **Tailwind CSS**, **Node.js**, and **MongoDB**, it provides a dynamic, user-friendly space for open expression. Users can register, post entries, comment on others' posts, and customize their profiles.
 
 ---
+<div align="center">
+
+### 🚀 Live Demo
+
+| 🌐  Live Application | 🔑  Test Account |
+|--------------------|----------------|
+| 👉 [Click here](https://eyewateringwords.netlify.app/) | 👉 Email: test@words.com, Password: Watereye123456 |
+
+</div>
 
 ## 🚀 Features
 
