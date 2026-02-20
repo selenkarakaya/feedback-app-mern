@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/tickets/";
-
+const API_BASE = (process.env.REACT_APP_API_URL || "").replace(/\/$/, "");
+const API_URL = `${API_BASE}/api/tickets/`;
 // Get ticket notes
 const getNotes = async (ticketId, token) => {
   const config = {

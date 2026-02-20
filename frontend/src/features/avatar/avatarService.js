@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "/api/avatar/";
-
+const API_BASE = (process.env.REACT_APP_API_URL || "").replace(/\/$/, "");
+const API_URL = `${API_BASE}/api/avatar/`;
 // Cretae new entry
 const createImage = async (newImage, token) => {
   const config = {

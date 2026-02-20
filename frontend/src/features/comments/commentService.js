@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "/api/entries/";
-
+const API_BASE = (process.env.REACT_APP_API_URL || "").replace(/\/$/, "");
+const API_URL = `${API_BASE}/api/entries/`;
 // Get entry comments
 const getComments = async (entryId) => {
   const response = await axios.get(API_URL + entryId + "/comments");

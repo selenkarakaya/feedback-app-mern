@@ -6,9 +6,31 @@ const { errorHandler } = require("./middleware/errorHandler");
 const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
 const app = express();
-let cors = require("cors");
+const cors = require("cors");
+const allowedOrigins = [
+  "https://eyewateringwords.netlify.app",
+  "http://localhost:3000",
+  "http://localhost:5173",
+];
 
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // origin yoksa (Postman/curl) izin ver
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Preflight (OPTIONS) istekleri için
+app.options("*", cors());
 // Connect to the database
 connectDB();
 // body parser middleware

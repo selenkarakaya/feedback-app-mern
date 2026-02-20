@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "/api/entries/";
-
+const API_BASE = (process.env.REACT_APP_API_URL || "").replace(/\/$/, "");
+const API_URL = `${API_BASE}/api/entries/`;
 // Cretae new entry
 const createEntry = async (entryData, token) => {
   const config = { headers: { Authorization: `Bearer ${token}` } };
