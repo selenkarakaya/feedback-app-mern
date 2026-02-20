@@ -19,4 +19,4 @@ export default BackButton;
 
 //onClick={() => navigate(-1)
 //or
-//<Link to{url} lassName='btn btn-reverse btn-back' > <FaArrowCircleLeft /> Back  </Link> (link tagi ile url verilip de yapilir)
+//<Link to{url} lassName='btn btn-reverse btn-back' > <FaArrowCircleLeft /> Back  </Link>
