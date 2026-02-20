@@ -17,21 +17,29 @@ function Allentries() {
   const { avatars } = useSelector((state) => state.avatars);
 
   useEffect(() => {
-    return () => {
-      if (isSuccess) {
-        dispatch(reset());
-      }
-    };
-  }, [dispatch, isSuccess]);
-
-  useEffect(() => {
     dispatch(getAllEntries());
     dispatch(getAvatar());
   }, [dispatch]);
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  useEffect(() => {
+    return () => {
+      if (isSuccess) dispatch(reset());
+    };
+  }, [dispatch, isSuccess]);
+
+  // ✅ GUARANTEE ARRAY (prevents ".map is not a function")
+  const entriesArray = Array.isArray(entriesAll)
+    ? entriesAll
+    : Array.isArray(entriesAll?.entries)
+    ? entriesAll.entries
+    : Array.isArray(entriesAll?.data)
+    ? entriesAll.data
+    : [];
+
+  const avatarsArray = Array.isArray(avatars) ? avatars : [];
+
+  if (isLoading) return <Spinner />;
+
   return (
     <>
       <div className="header my-6 flex items-center">
@@ -39,50 +47,54 @@ function Allentries() {
           Eye Watering Entries
         </h1>
       </div>
+
       <div className="card-list grid md:grid-cols-2 lg:grid-cols-3 gap-4 mx-4">
-        {entriesAll.map((entry) => (
+        {entriesArray.map((entry) => (
           <div className="borderCSS" key={entry._id}>
             <div className="flex flex-col items-start space-y-4 p-4 hover">
               <p className="text-darkestGreen">{entry.description}</p>
               <h1 className="text-darkenGreen">#{entry.tag}</h1>
+
               <div className="flex self-end items-center space-x-1">
                 <div>
                   <h4 className="italic text-end text-darkGreen">
                     {entry.username}
                   </h4>
                   <h5 className="text-sm">
-                    {new Date(entry.createdAt).toLocaleString("en-UK")}
+                    {entry.createdAt
+                      ? new Date(entry.createdAt).toLocaleString("en-GB")
+                      : ""}
                   </h5>
                 </div>
-                {avatars.map((avatar) => {
-                  return (
-                    entry.user === avatar.user && (
-                      <div className="sign-left shape-outer">
-                        <img
-                          key={avatar._id}
-                          src={require(`../components/uploads/${avatar.file}`)}
-                          alt=""
-                          className="w-12 h-12 shape-inner sign-left"
-                        />
-                      </div>
-                    )
-                  );
-                })}
+
+                {avatarsArray.map((avatar) =>
+                  entry.user === avatar.user ? (
+                    <div className="sign-left shape-outer" key={avatar._id}>
+                      <img
+                        src={require(`../components/uploads/${avatar.file}`)}
+                        alt=""
+                        className="w-12 h-12 shape-inner sign-left"
+                      />
+                    </div>
+                  ) : null
+                )}
               </div>
             </div>
+
             <div className="flex justify-between mx-2 mb-2">
               {user ? (
                 <Link to={`/entry/${entry._id}`}>
                   <GoCommentDiscussion style={{ fontSize: "1.6rem" }} />
                 </Link>
               ) : (
-                <Link to={"/login"}>
-                  <GoCommentDiscussion />
+                <Link to="/login">
+                  <GoCommentDiscussion style={{ fontSize: "1.6rem" }} />
                 </Link>
               )}
+
               {user && user._id === entry.user && (
                 <Link
-                  to={"/Profile"}
+                  to="/Profile"
                   className="hover:scale-125 hover:animate-spin"
                 >
                   <PiHandPointingLight style={{ fontSize: "1.6rem" }} />
